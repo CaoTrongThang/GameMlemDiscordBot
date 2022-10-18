@@ -13,11 +13,16 @@ public class OsuUserData {
     private String country_code;
     private String default_group;
     private long id;
+    private String playmode;
 
     private OsuUserMonthlyPlayerCounts[] monthly_playcounts;
 
     private OsuUserStatistics statistics;
     private OsuCover cover;
+
+    public String getPlaymode() {
+        return playmode;
+    }
 
     public OsuUserMonthlyPlayerCounts[] getMothly_playcounts() {
         return monthly_playcounts;

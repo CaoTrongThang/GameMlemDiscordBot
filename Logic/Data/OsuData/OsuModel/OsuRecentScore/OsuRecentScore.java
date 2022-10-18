@@ -12,11 +12,31 @@ public class OsuRecentScore {
     private long score;
     private String mode;
     private float pp;
+    private float accuracy;
+    private String created_at;
 
     private OsuRecentScoreStatistics statistics;
     private OsuBeatmapData beatmap;
     private OsuBeatmapSet beatmapset;
     private OsuUserData user;
+
+    private short customRetry;
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public short getRetry() {
+        return customRetry;
+    }
+
+    public void setCustomRetry(short customRetry) {
+        this.customRetry = customRetry;
+    }
+
+    public float getAccuracy() {
+        return accuracy;
+    }
 
     public float getPp() {
         return pp;

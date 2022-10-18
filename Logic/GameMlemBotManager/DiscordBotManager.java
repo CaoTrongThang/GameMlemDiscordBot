@@ -10,27 +10,20 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
-import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.dv8tion.jda.internal.interactions.CommandDataImpl;
-import net.dv8tion.jda.internal.interactions.command.CommandImpl;
-import src.ctt.GameMlemBot.Logic.Commands.BaseCommands;
-import src.ctt.GameMlemBot.Logic.Commands.BrawlhallaCommandHandler.BrawlhallaSubCommands;
-import src.ctt.GameMlemBot.Logic.Commands.BrawlhallaCommandHandler.Handler;
-import src.ctt.GameMlemBot.Logic.Commands.OsuCommandHandler.OsuHandler;
-import src.ctt.GameMlemBot.Logic.Commands.OsuCommandHandler.OsuSubCommands;
 import src.ctt.GameMlemBot.Logic.Events.OnMessageRecieve;
 import src.ctt.GameMlemBot.Logic.Events.OnSlashCommand;
-import src.ctt.GameMlemBot.Utils.DefaultBotMessages;
+import src.ctt.GameMlemBot.Logic.Handler.BaseCommands;
+import src.ctt.GameMlemBot.Logic.Handler.BrawlhallaHandler.BrawlhallaCommandHandler.BrawlhallaSubCommands;
+import src.ctt.GameMlemBot.Logic.Handler.OsuHandler.OsuCommandHandler.OsuSubCommands;
 
 public class DiscordBotManager {
     public static JDA jda;
     public static List<Guild> guilds;
-
+    public static final String BOT_ACTIVITY = "Game Mlem";
+    public static final String DISCORD_BOT_STARTED = "Game Mlem Discord Bot is started!";
     static {
         Message.suppressContentIntentWarning();
     }
@@ -39,7 +32,7 @@ public class DiscordBotManager {
         guilds = new ArrayList<>();
         jda = JDABuilder.createDefault(token)
                 .enableIntents(GatewayIntent.MESSAGE_CONTENT)
-                .setActivity(Activity.playing(DefaultBotMessages.BOT_ACTIVITY))
+                .setActivity(Activity.playing(BOT_ACTIVITY))
                 .build();
         try {
             jda.awaitReady();
@@ -54,7 +47,7 @@ public class DiscordBotManager {
 
         addSlashCommand();
 
-        System.out.println(DefaultBotMessages.DISCORD_BOT_STARTED);
+        System.out.println(DISCORD_BOT_STARTED);
     }
 
     public static void addEvent(ListenerAdapter event) {
