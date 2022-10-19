@@ -5,18 +5,25 @@ import java.util.List;
 
 import src.ctt.GameMlemBot.Interface.IDataManager;
 import src.ctt.GameMlemBot.Logic.Data.BrawlhallaData.BrawlhallaDataManager;
+import src.ctt.GameMlemBot.Logic.Data.GameMlemData.GameMlemDataManager;
 import src.ctt.GameMlemBot.Logic.Data.OsuData.OsuDataManager;
 
 public class DataManager {
     public static List<IDataManager> dataManagers = new ArrayList<>();
 
-    public static void saveData() {
+    static {
+        dataManagers.add(new OsuDataManager());
+        dataManagers.add(new BrawlhallaDataManager());
+        dataManagers.add(new GameMlemDataManager());
+    }
+
+    public void saveData() {
         for (IDataManager manager : dataManagers) {
             manager.saveData();
         }
     }
 
-    public static void loadData() {
+    public void loadData() {
         for (IDataManager manager : dataManagers) {
             manager.loadData();
         }

@@ -6,7 +6,7 @@ public class OsuBeatmapData {
     private String status;
     private float ar;
     private float accuracy;
-    private short bpm;
+    private float bpm;
     private float difficulty_rating;
     private int count_circles;
     private int count_sliders;
@@ -66,7 +66,7 @@ public class OsuBeatmapData {
         return this.accuracy;
     }
 
-    public short getBpm() {
+    public float getBpm() {
         return this.bpm;
     }
 

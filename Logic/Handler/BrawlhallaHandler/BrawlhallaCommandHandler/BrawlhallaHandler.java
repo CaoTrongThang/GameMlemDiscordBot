@@ -1,5 +1,9 @@
 package src.ctt.GameMlemBot.Logic.Handler.BrawlhallaHandler.BrawlhallaCommandHandler;
 
-public class BrawlhallaHandler {
+import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 
+public class BrawlhallaHandler {
+    public void brawlhallaCommandHandler(SlashCommandInteraction e) {
+
+    }
 }

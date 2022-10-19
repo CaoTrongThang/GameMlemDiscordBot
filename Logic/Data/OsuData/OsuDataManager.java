@@ -21,16 +21,14 @@ public class OsuDataManager implements IDataManager {
 
     public static Gson gson = new GsonBuilder().create();
 
-    static {
-        DataManager.dataManagers.add(new OsuDataManager());
-    }
-
     @Override
     public void loadData() {
+        System.out.println("Here");
         Type type = new TypeToken<List<OsuUserDiscordData>>() {
         }.getType();
         String data = new String(ByteOperator.readByteFromFile(FilePath.OSU_DISCORD_LINK_PATH), StandardCharsets.UTF_8);
         osuDiscordLinkList = gson.fromJson(data, type);
+        System.out.println(osuDiscordLinkList.size());
     }
 
     @Override

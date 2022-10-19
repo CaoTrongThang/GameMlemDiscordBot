@@ -186,14 +186,20 @@ public class OsuRequest {
                     return null;
                 }
                 for (int index = retryTimes; index < scores.length;) {
-                    if (index != scores.length - 1
-                            && scores[retryTimes].getBeatmap().getId() == scores[index + 1].getBeatmap().getId()) {
-                        retryTimes++;
-                    } else if (index == scores.length - 2
-                            && scores[retryTimes].getBeatmap().getId() == scores[index + 1].getBeatmap().getId()) {
+
+                    if (retryTimes == scores.length - 2
+                            && scores[retryTimes].getBeatmap().getId() == scores[retryTimes + 1].getBeatmap().getId()) {
                         retryTimes++;
                         limit += LIMIT_INCREASE_RATE;
-                    } else if (scores[retryTimes].getBeatmap().getId() != scores[index + 1].getBeatmap().getId()) {
+                        break;
+                    }
+
+                    if (index != scores.length - 1
+                            && scores[retryTimes].getBeatmap().getId() == scores[retryTimes + 1].getBeatmap().getId()) {
+                        retryTimes++;
+                    }
+
+                    if (scores[retryTimes].getBeatmap().getId() != scores[retryTimes + 1].getBeatmap().getId()) {
                         isSame = false;
                         break;
                     }

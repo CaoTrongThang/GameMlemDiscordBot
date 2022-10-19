@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.MessageEmbed.Field;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 import src.ctt.GameMlemBot.Enum.Games;
 import src.ctt.GameMlemBot.Enum.OsuModes;
@@ -24,9 +25,11 @@ import src.ctt.GameMlemBot.Logic.Data.OsuData.OsuUserDiscordData;
 import src.ctt.GameMlemBot.Logic.Data.OsuData.OsuModel.OsuBeatmapCalculateData.OsuBeatmapCalculatedData;
 import src.ctt.GameMlemBot.Logic.Data.OsuData.OsuModel.OsuRecentScore.OsuRecentScore;
 import src.ctt.GameMlemBot.Logic.Data.OsuData.OsuModel.OsuUserData.OsuUserData;
+import src.ctt.GameMlemBot.Logic.GameMlemBotManager.DiscordBotManager;
 import src.ctt.GameMlemBot.Utils.ConvertSecondToDateString;
 
 public class OsuHandler {
+
     private OsuRequest osuRequest = new OsuRequest();
     private OsuDataManager osuDataManager = new OsuDataManager();
     private GameMlemDataManager gameMlemDataManager = new GameMlemDataManager();
@@ -366,12 +369,10 @@ public class OsuHandler {
 
         if (num >= 0) {
             eb.setDescription(new DefaultEmbed().ROLL_SCORE(new OsuUtilsMethod().roll(num)));
-            e.deferReply().queue();
             e.getHook().editOriginalEmbeds(eb.build()).queue();
             return;
         } else if (num <= 0) {
             eb.setDescription(new DefaultEmbed().ROLL_SCORE(new OsuUtilsMethod().roll(100)));
-            e.deferReply().queue();
             e.getHook().editOriginalEmbeds(eb.build()).queue();
             return;
         }

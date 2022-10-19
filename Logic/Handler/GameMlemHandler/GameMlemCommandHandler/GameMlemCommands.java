@@ -21,11 +21,4 @@ public class GameMlemCommands {
     public static final SubcommandData[] GAME_MLEM_SUB_COMMANDS = {
             new SubcommandData(DANG_KY_COMMAND, DANG_KY_COMMAND_DESC)
     };
-
-    static {
-        System.out.println("GameMlem");
-        DiscordBotManager.slashCommands
-                .add(Commands.slash(GAME_MLEM_BASE_COMMAND, GAME_MLEM_BASE_COMMAND_DESC)
-                        .addSubcommands(GAME_MLEM_SUB_COMMANDS));
-    }
 }

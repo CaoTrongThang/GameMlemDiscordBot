@@ -10,7 +10,7 @@ public class GameMlemHandler {
 
     }
 
-    public void DANG_KY_HANDLER() {
+    private void DANG_KY_HANDLER() {
 
     }
 }

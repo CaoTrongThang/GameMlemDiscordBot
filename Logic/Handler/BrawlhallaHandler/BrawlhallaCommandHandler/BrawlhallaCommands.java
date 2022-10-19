@@ -12,15 +12,8 @@ public class BrawlhallaCommands {
     public static final String LINK_COMMAND = "link";
     public static final String LINK_COMMAND_DESC = "Liên kết tài khoản Brawlhalla và Discord";
 
-    public static final SubcommandData[] BRAWLHALL_SUB_COMMANDS = {
+    public static final SubcommandData[] BRAWLHALLA_SUB_COMMANDS = {
             new SubcommandData(LINK_COMMAND, LINK_COMMAND_DESC).addOption(OptionType.STRING, "id",
                     "điền tên brawlhalla id"),
     };
-
-    static {
-        System.out.println("Brawl");
-        DiscordBotManager.slashCommands
-                .add(Commands.slash(BRAWLHALLA_BASE_COMMAND, BRAWLHALLA_BASE_COMMAND_DESC)
-                        .addSubcommands(BRAWLHALL_SUB_COMMANDS));
-    }
 }

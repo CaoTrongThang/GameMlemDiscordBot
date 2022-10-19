@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import src.ctt.GameMlemBot.Logic.GameMlemBotManager.DiscordBotManager;
 
 public class OsuCommands {
+
         public static final String OSU_BASE_COMMAND = "osu";
         public static final String OSU_BASE_COMMAND_DESC = "lệnh cơ bản của osu";
 
@@ -58,9 +59,4 @@ public class OsuCommands {
                         new SubcommandData(AVATAR_COMMAND, AVATAR_COMMAND_DESC)
         };
 
-        static {
-                DiscordBotManager.slashCommands
-                                .add(Commands.slash(OSU_BASE_COMMAND, OSU_BASE_COMMAND_DESC)
-                                                .addSubcommands(OSU_SUB_COMMANDS));
-        }
 }
