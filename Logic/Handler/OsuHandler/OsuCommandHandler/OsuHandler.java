@@ -33,19 +33,19 @@ public class OsuHandler {
 
     public void osuCommandHander(SlashCommandInteractionEvent e) {
         // LINK HANDLER
-        if (e.getSubcommandName().equalsIgnoreCase(OsuSubCommands.LINK_COMMAND)) {
+        if (e.getSubcommandName().equalsIgnoreCase(OsuCommands.LINK_COMMAND)) {
             LINK_COMMAND_HANDLER(e);
             return;
         }
         // ! FIRST STEP: DOUBLE CHECK IF USER HAD LINKED WITH DISCORD
 
-        if (e.getOption(OsuSubCommands.userNameOrIDArg) != null) {
+        if (e.getOption(OsuCommands.userNameOrIDArg) != null) {
             OsuUserDiscordData osuDiscord = osuDataManager
-                    .findOsuDiscordLink(e.getOption(OsuSubCommands.userNameOrIDArg).getAsUser().getIdLong());
+                    .findOsuDiscordLink(e.getOption(OsuCommands.userNameOrIDArg).getAsUser().getIdLong());
             if (osuDiscord == null) {
                 new DefaultEmbed().sendAndDeleteMessageAfter(e,
                         new DefaultEmbed().ACCOUNT_IS_NOT_LINKED(
-                                e.getOption(OsuSubCommands.userNameOrIDArg).getAsUser().getName(),
+                                e.getOption(OsuCommands.userNameOrIDArg).getAsUser().getName(),
                                 Games.OSU.getValue()));
                 return;
             }
@@ -61,36 +61,36 @@ public class OsuHandler {
         // ! ========================================================================
 
         // UNLINK HANDLER
-        if (e.getSubcommandName().equalsIgnoreCase(OsuSubCommands.UNLINK_COMMAND)) {
+        if (e.getSubcommandName().equalsIgnoreCase(OsuCommands.UNLINK_COMMAND)) {
             UNLINK_COMMAND_HANDLER(e);
             return;
         }
         // STATS HANDLER
-        else if (e.getSubcommandName().equalsIgnoreCase(OsuSubCommands.STATS_COMMAND)) {
+        else if (e.getSubcommandName().equalsIgnoreCase(OsuCommands.STATS_COMMAND)) {
             STATS_COMMAND_HANDLER(e);
             return;
         }
 
         // TOP HANDLER
         // TODO
-        else if (e.getSubcommandName().equalsIgnoreCase(OsuSubCommands.TOP_COMMAND)) {
+        else if (e.getSubcommandName().equalsIgnoreCase(OsuCommands.TOP_COMMAND)) {
             TOP_COMMAND_HANDLER(e);
             return;
         }
         // RECENT HANDLER
-        else if (e.getSubcommandName().equalsIgnoreCase(OsuSubCommands.RECENT_COMMAND)) {
+        else if (e.getSubcommandName().equalsIgnoreCase(OsuCommands.RECENT_COMMAND)) {
             RECENT_COMMNAD_HANDLER(e);
             return;
         }
 
         // ROLL HANDLER
-        else if (e.getSubcommandName().equalsIgnoreCase(OsuSubCommands.ROLL_COMMAND)) {
+        else if (e.getSubcommandName().equalsIgnoreCase(OsuCommands.ROLL_COMMAND)) {
             ROLL_COMMAND_HANDLER(e);
             return;
         }
 
         // AVATAR HANDLER
-        else if (e.getSubcommandName().equalsIgnoreCase(OsuSubCommands.AVATAR_COMMAND)) {
+        else if (e.getSubcommandName().equalsIgnoreCase(OsuCommands.AVATAR_COMMAND)) {
             AVATAR_COMMAND_HANDLER(e);
             return;
         }
@@ -106,28 +106,28 @@ public class OsuHandler {
         OsuModes osuMode = null;
 
         try {
-            if (e.getOption(OsuSubCommands.osuModeArg) != null) {
+            if (e.getOption(OsuCommands.osuModeArg) != null) {
                 try {
-                    OsuModes.valueOf(e.getOption(OsuSubCommands.osuModeArg).getAsString());
+                    OsuModes.valueOf(e.getOption(OsuCommands.osuModeArg).getAsString());
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     new DefaultEmbed().sendAndDeleteMessageAfter(e,
-                            new OsuEmbed().WRONG_OSU_MODE(e.getOption(OsuSubCommands.osuModeArg).getAsString()));
+                            new OsuEmbed().WRONG_OSU_MODE(e.getOption(OsuCommands.osuModeArg).getAsString()));
                     return;
                 }
-                if (OsuModes.valueOf(e.getOption(OsuSubCommands.osuModeArg).getAsString()) == OsuModes.osu) {
+                if (OsuModes.valueOf(e.getOption(OsuCommands.osuModeArg).getAsString()) == OsuModes.osu) {
                     osuMode = OsuModes.osu;
-                } else if (OsuModes.valueOf(e.getOption(OsuSubCommands.osuModeArg).getAsString()) == OsuModes.mania) {
+                } else if (OsuModes.valueOf(e.getOption(OsuCommands.osuModeArg).getAsString()) == OsuModes.mania) {
                     osuMode = OsuModes.mania;
-                } else if (OsuModes.valueOf(e.getOption(OsuSubCommands.osuModeArg).getAsString()) == OsuModes.taiko) {
+                } else if (OsuModes.valueOf(e.getOption(OsuCommands.osuModeArg).getAsString()) == OsuModes.taiko) {
                     osuMode = OsuModes.taiko;
-                } else if (OsuModes.valueOf(e.getOption(OsuSubCommands.osuModeArg).getAsString()) == OsuModes.fruits) {
+                } else if (OsuModes.valueOf(e.getOption(OsuCommands.osuModeArg).getAsString()) == OsuModes.fruits) {
                     osuMode = OsuModes.fruits;
                 }
             }
 
-            if (e.getOption(OsuSubCommands.userNameOrIDArg) != null) {
-                targetDisUser = e.getOption(OsuSubCommands.userNameOrIDArg).getAsUser();
+            if (e.getOption(OsuCommands.userNameOrIDArg) != null) {
+                targetDisUser = e.getOption(OsuCommands.userNameOrIDArg).getAsUser();
                 osuUser = osuRequest.getUser(osuDataManager.getOsuID(targetDisUser.getIdLong()));
                 if (osuMode == null) {
                     osuMode = osuMode.valueOf(osuUser.getPlaymode());
@@ -278,13 +278,13 @@ public class OsuHandler {
     }
 
     public void LINK_COMMAND_HANDLER(SlashCommandInteractionEvent e) {
-        if (e.getOption(OsuSubCommands.userNameOrIDArg) == null) {
+        if (e.getOption(OsuCommands.userNameOrIDArg) == null) {
             new DefaultEmbed().sendAndDeleteMessageAfter(e,
                     new DefaultEmbed().INVALID_ID(null));
             return;
         }
         try {
-            String option = e.getOption(OsuSubCommands.userNameOrIDArg).getAsString();
+            String option = e.getOption(OsuCommands.userNameOrIDArg).getAsString();
 
             OsuUserData user = osuRequest.getUser(option);
             if (user == null) {
@@ -346,10 +346,10 @@ public class OsuHandler {
         long num;
         EmbedBuilder eb;
 
-        if (e.getOption(OsuSubCommands.numberArg) == null) {
+        if (e.getOption(OsuCommands.numberArg) == null) {
             num = 100;
         } else {
-            num = (long) e.getOption(OsuSubCommands.numberArg).getAsDouble();
+            num = (long) e.getOption(OsuCommands.numberArg).getAsDouble();
         }
 
         eb = new EmbedBuilder();
@@ -386,18 +386,18 @@ public class OsuHandler {
         User discordMetionUser;
         StringBuilder strBuilder;
 
-        if (e.getOption(OsuSubCommands.osuModeArg) == null) {
+        if (e.getOption(OsuCommands.osuModeArg) == null) {
             mode = OsuModes.osu;
-        } else if (OsuModes.valueOf(e.getOption(OsuSubCommands.osuModeArg).getAsString().toLowerCase()) == null) {
+        } else if (OsuModes.valueOf(e.getOption(OsuCommands.osuModeArg).getAsString().toLowerCase()) == null) {
             new DefaultEmbed().sendAndDeleteMessageAfter(e,
-                    new OsuEmbed().WRONG_OSU_MODE(e.getOption(OsuSubCommands.osuModeArg).getAsString()));
+                    new OsuEmbed().WRONG_OSU_MODE(e.getOption(OsuCommands.osuModeArg).getAsString()));
             return;
         } else {
-            mode = OsuModes.valueOf(e.getOption(OsuSubCommands.osuModeArg).getAsString().toLowerCase());
+            mode = OsuModes.valueOf(e.getOption(OsuCommands.osuModeArg).getAsString().toLowerCase());
         }
 
-        if (e.getOption(OsuSubCommands.userNameOrIDArg) != null) {
-            discordMetionUser = e.getOption(OsuSubCommands.userNameOrIDArg).getAsUser();
+        if (e.getOption(OsuCommands.userNameOrIDArg) != null) {
+            discordMetionUser = e.getOption(OsuCommands.userNameOrIDArg).getAsUser();
             dUser = osuDataManager.findOsuDiscordLink(discordMetionUser.getIdLong());
             if (dUser == null) {
                 new DefaultEmbed().sendAndDeleteMessageAfter(e,

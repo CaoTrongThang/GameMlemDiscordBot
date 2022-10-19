@@ -25,6 +25,7 @@ public class Start {
         OsuRequest.postAccessAPIKey();
 
         DataManager.loadData();
+
         // start bot
         DiscordBotManager.connect(EnviromentGet.DISCORD_BOT_TOKEN());
     }

@@ -15,15 +15,14 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import src.ctt.GameMlemBot.Logic.Events.OnMessageRecieve;
 import src.ctt.GameMlemBot.Logic.Events.OnSlashCommand;
-import src.ctt.GameMlemBot.Logic.Handler.BaseCommands;
-import src.ctt.GameMlemBot.Logic.Handler.BrawlhallaHandler.BrawlhallaCommandHandler.BrawlhallaSubCommands;
-import src.ctt.GameMlemBot.Logic.Handler.OsuHandler.OsuCommandHandler.OsuSubCommands;
 
 public class DiscordBotManager {
     public static JDA jda;
     public static List<Guild> guilds;
     public static final String BOT_ACTIVITY = "Game Mlem";
     public static final String DISCORD_BOT_STARTED = "Game Mlem Discord Bot is started!";
+    public static Collection<SlashCommandData> slashCommands = new ArrayList<>();
+
     static {
         Message.suppressContentIntentWarning();
     }
@@ -55,21 +54,8 @@ public class DiscordBotManager {
     }
 
     public static void addSlashCommand() {
-        Collection<SlashCommandData> commands = new ArrayList<>();
-
-        for (int r = 0; r < BaseCommands.BASE_COMMANDS.length; r++) {
-            if (BaseCommands.BASE_COMMANDS[r][0].equalsIgnoreCase("gamemlem")) {
-
-            } else if (BaseCommands.BASE_COMMANDS[r][0].equalsIgnoreCase("osu")) {
-                commands.add(Commands.slash(BaseCommands.BASE_COMMANDS[r][0], BaseCommands.BASE_COMMANDS[r][1])
-                        .addSubcommands(OsuSubCommands.OSU_SUB_COMMANDS));
-            } else if (BaseCommands.BASE_COMMANDS[r][0].equalsIgnoreCase("brawlhalla")) {
-                commands.add(Commands.slash(BaseCommands.BASE_COMMANDS[r][0], BaseCommands.BASE_COMMANDS[r][1])
-                        .addSubcommands(BrawlhallaSubCommands.BRAWLHALL_SUB_COMMANDS));
-            }
-        }
         for (Guild guild : guilds) {
-            guild.updateCommands().addCommands(commands).queue();
+            guild.updateCommands().addCommands(slashCommands).queue();
         }
     }
 
