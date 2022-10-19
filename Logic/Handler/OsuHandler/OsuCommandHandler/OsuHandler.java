@@ -18,19 +18,18 @@ import src.ctt.GameMlemBot.Enum.Games;
 import src.ctt.GameMlemBot.Enum.OsuModes;
 import src.ctt.GameMlemBot.Language.DefaultEmbed;
 import src.ctt.GameMlemBot.Language.OsuEmbed;
+import src.ctt.GameMlemBot.Logic.Data.GameMlemData.GameMlemDataManager;
 import src.ctt.GameMlemBot.Logic.Data.OsuData.OsuDataManager;
 import src.ctt.GameMlemBot.Logic.Data.OsuData.OsuUserDiscordData;
 import src.ctt.GameMlemBot.Logic.Data.OsuData.OsuModel.OsuBeatmapCalculateData.OsuBeatmapCalculatedData;
 import src.ctt.GameMlemBot.Logic.Data.OsuData.OsuModel.OsuRecentScore.OsuRecentScore;
 import src.ctt.GameMlemBot.Logic.Data.OsuData.OsuModel.OsuUserData.OsuUserData;
-import src.ctt.GameMlemBot.Meta.HighPriorityUsers;
 import src.ctt.GameMlemBot.Utils.ConvertSecondToDateString;
-import src.ctt.GameMlemBot.Utils.IsHighPriorityUser;
-import src.ctt.GameMlemBot.Utils.IsLowPriorityUser;
 
 public class OsuHandler {
     private OsuRequest osuRequest = new OsuRequest();
     private OsuDataManager osuDataManager = new OsuDataManager();
+    private GameMlemDataManager gameMlemDataManager = new GameMlemDataManager();
 
     public void osuCommandHander(SlashCommandInteractionEvent e) {
         // LINK HANDLER
@@ -205,8 +204,13 @@ public class OsuHandler {
                     break;
 
             }
-            strBuilder.append("🞂 " + OsuEmbed.USER_RANK_GLOBAL + "**" + grade + "** ("
-                    + String.format("%.2f", new OsuUtilsMethod().getRecentCompletePercent(osuScore)) + "%)\n");
+            if (osuScore.getPassed()) {
+                strBuilder.append("🞂 " + OsuEmbed.USER_RANK_GLOBAL + "**" + grade + "**\n");
+            } else {
+                strBuilder.append("🞂 " + OsuEmbed.USER_RANK_GLOBAL + "**" + grade + "** ("
+                        + String.format("%.2f", new OsuUtilsMethod().getRecentCompletePercent(osuScore)) + "%)\n");
+            }
+
             if (osuScore.getPp() == 0.0) {
                 strBuilder.append("🞂 " +
                         OsuEmbed.USER_PP + "**" + String.format("%.2f", osuRequest.getUserRecentPP(osuScore).getPp())
@@ -353,7 +357,7 @@ public class OsuHandler {
         eb.setColor(DefaultEmbed.DEFAULT_EMBED_COLOR);
         eb.setTitle(new DefaultEmbed().ROLL_TITLE(e.getUser().getName()));
 
-        if (new IsHighPriorityUser().Check(e.getUser().getIdLong())) {
+        if (gameMlemDataManager.isHighPriorityUser((e.getUser().getIdLong()))) {
             eb.setFooter(DefaultEmbed.ROLL_FOOTER,
                     "https://www.publicdomainpictures.net/pictures/380000/nahled/3-premium-gold-dice.png");
         } else {
@@ -427,7 +431,7 @@ public class OsuHandler {
         String infoFieldTitle = OsuEmbed.INFO_FIELD_TITLE;
         String infoFieldValue = "";
         strBuilder = new StringBuilder(infoFieldValue);
-        if (new IsLowPriorityUser().Check(e.getUser().getIdLong())) {
+        if (gameMlemDataManager.isLowPriorityUser(e.getUser().getIdLong())) {
             strBuilder.append(OsuEmbed.USER_RANK_GLOBAL + "**Harumachi**\n");
             strBuilder.append(OsuEmbed.USER_PP + "**Harumachi**\n");
             strBuilder.append(OsuEmbed.USER_ACCURACY + "**Harumachi**\n");

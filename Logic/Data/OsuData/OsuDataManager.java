@@ -11,6 +11,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import src.ctt.GameMlemBot.Interface.IDataManager;
+import src.ctt.GameMlemBot.Logic.Data.DataManager;
 import src.ctt.GameMlemBot.Logic.Data.OsuData.OsuModel.OsuUserData.OsuUserData;
 import src.ctt.GameMlemBot.Utils.ByteOperator;
 import src.ctt.GameMlemBot.Utils.FilePath;
@@ -19,6 +20,10 @@ public class OsuDataManager implements IDataManager {
     private static List<OsuUserDiscordData> osuDiscordLinkList;
 
     public static Gson gson = new GsonBuilder().create();
+
+    static {
+        DataManager.dataManagers.add(new OsuDataManager());
+    }
 
     @Override
     public void loadData() {

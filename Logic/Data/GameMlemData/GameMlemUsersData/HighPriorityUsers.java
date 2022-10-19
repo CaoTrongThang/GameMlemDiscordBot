@@ -1,4 +1,4 @@
-package src.ctt.GameMlemBot.Meta;
+package src.ctt.GameMlemBot.Logic.Data.GameMlemData.GameMlemUsersData;
 
 import java.util.List;
 

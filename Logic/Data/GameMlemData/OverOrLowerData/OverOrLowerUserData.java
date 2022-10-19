@@ -1,6 +1,6 @@
-package src.ctt.GameMlemBot.Logic.Data.GameMlemData;
+package src.ctt.GameMlemBot.Logic.Data.GameMlemData.OverOrLowerData;
 
-public class OverOrLowerData {
+public class OverOrLowerUserData {
     private int winTimes;
     private int loseTimes;
     private int playTime;
