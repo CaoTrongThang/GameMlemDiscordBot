@@ -5,7 +5,7 @@ import java.lang.StackWalker.Option;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
-import src.ctt.GameMlemBot.Logic.GameMlemBotManager.DiscordBotManager;
+import src.ctt.GameMlemBot.Logic.GameMlemBotManager.GameMlemBotManager;
 
 public class OsuCommands {
 
@@ -44,16 +44,16 @@ public class OsuCommands {
 
         public static final SubcommandData[] OSU_SUB_COMMANDS = {
                         new SubcommandData(LINK_COMMAND, LINK_COMMAND_DESC)
-                                        .addOption(OptionType.STRING, userNameOrIDArg, userNameOrIdDesc),
+                                        .addOption(OptionType.STRING, userNameOrIDArg, userNameOrIdDesc, true, false),
                         new SubcommandData(UNLINK_COMMAND, UNLINK_COMMAND_DESC),
                         new SubcommandData(TOP_COMMAND, TOP_COMMAND_DESC)
                                         .addOption(OptionType.USER, userNameOrIDArg, userNameOrIdDesc),
                         new SubcommandData(STATS_COMMAND, STATS_COMMAND_DESC)
                                         .addOption(OptionType.USER, userNameOrIDArg, userNameOrIdDesc)
-                                        .addOption(OptionType.STRING, osuModeArg, osuModeDesc),
+                                        .addOption(OptionType.STRING, osuModeArg, osuModeDesc, false, true),
                         new SubcommandData(RECENT_COMMAND, RECENT_COMMAND_DESC)
                                         .addOption(OptionType.USER, userNameOrIDArg, userNameOrIdDesc)
-                                        .addOption(OptionType.STRING, osuModeArg, osuModeDesc),
+                                        .addOption(OptionType.STRING, osuModeArg, osuModeDesc, false, true),
                         new SubcommandData(ROLL_COMMAND, ROLL_COMMAND_DESC)
                                         .addOption(OptionType.NUMBER, numberArg, numberDesc),
                         new SubcommandData(AVATAR_COMMAND, AVATAR_COMMAND_DESC)

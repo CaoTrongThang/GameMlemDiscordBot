@@ -11,15 +11,15 @@ import java.nio.file.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import src.ctt.GameMlemBot.Enum.OsuModes;
-import src.ctt.GameMlemBot.Enum.OsuMods;
-import src.ctt.GameMlemBot.Logic.Data.OsuData.OsuAPIKey;
-import src.ctt.GameMlemBot.Logic.Data.OsuData.OsuModel.OsuBeatmapCalculateData.OsuBeatmapCalculatedData;
-import src.ctt.GameMlemBot.Logic.Data.OsuData.OsuModel.OsuBeatmapData.OsuBeatmapData;
-import src.ctt.GameMlemBot.Logic.Data.OsuData.OsuModel.OsuBestScore.OsuBestScore;
-import src.ctt.GameMlemBot.Logic.Data.OsuData.OsuModel.OsuRecentScore.OsuRecentScore;
-import src.ctt.GameMlemBot.Logic.Data.OsuData.OsuModel.OsuUserData.OsuUserData;
-import src.ctt.GameMlemBot.Logic.Data.OsuData.OsuModel.OsuUserData.OsuUserStatistics.OsuUserMonthlyPlayerCounts;
+import src.ctt.GameMlemBot.Enums.OsuModes;
+import src.ctt.GameMlemBot.Enums.OsuMods;
+import src.ctt.GameMlemBot.Logic.Model.OsuData.OsuAPIKey;
+import src.ctt.GameMlemBot.Logic.Model.OsuData.OsuModel.OsuBeatmapCalculateData.OsuBeatmapCalculatedData;
+import src.ctt.GameMlemBot.Logic.Model.OsuData.OsuModel.OsuBeatmapData.OsuBeatmapData;
+import src.ctt.GameMlemBot.Logic.Model.OsuData.OsuModel.OsuBestScore.OsuBestScore;
+import src.ctt.GameMlemBot.Logic.Model.OsuData.OsuModel.OsuRecentScore.OsuRecentScore;
+import src.ctt.GameMlemBot.Logic.Model.OsuData.OsuModel.OsuUserData.OsuUserData;
+import src.ctt.GameMlemBot.Logic.Model.OsuData.OsuModel.OsuUserData.OsuUserStatistics.OsuUserMonthlyPlayerCounts;
 import src.ctt.GameMlemBot.Utils.EnviromentGet;
 import src.ctt.GameMlemBot.Utils.FilePath;
 
@@ -301,7 +301,7 @@ public class OsuRequest {
             beatmap = getBeatmapData(mapID);
 
             beatmapCalculate = new URL(OSU_BEATMAP_CALCULATOR_URL
-                    + "?mods=" + OsuMods.NONE.getTotalModsBitwise(mods)
+                    + "?mods=" + OsuMods.AP.getTotalModsBitwise(mods)
                     + "&bID=" + beatmapName
                     + "&maxCombo=" + beatmap.getMax_combo()
                     + "&acc=" + acc * 100);
@@ -367,7 +367,7 @@ public class OsuRequest {
             beatmap = getBeatmapData(score.getBeatmap().getId());
 
             beatmapCalculate = new URL(OSU_USER_RECENT_PP_URL
-                    + "?mods=" + OsuMods.NONE.getTotalModsBitwise(score.getMods())
+                    + "?mods=" + OsuMods.AP.getTotalModsBitwise(score.getMods())
                     + "&bID=" + beatmapName
                     + "&acc=" + score.getAccuracy() * 100
                     + "&mode=" + OsuModes.valueOf(score.getMode()).getID()

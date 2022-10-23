@@ -3,7 +3,7 @@ package src.ctt.GameMlemBot.Logic.Handler.BrawlhallaHandler.BrawlhallaCommandHan
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
-import src.ctt.GameMlemBot.Logic.GameMlemBotManager.DiscordBotManager;
+import src.ctt.GameMlemBot.Logic.GameMlemBotManager.GameMlemBotManager;
 
 public class BrawlhallaCommands {
     public static final String BRAWLHALLA_BASE_COMMAND = "brawlhalla";

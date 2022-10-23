@@ -2,10 +2,10 @@ package src.ctt.GameMlemBot;
 
 import java.io.File;
 
-import src.ctt.GameMlemBot.Logic.Data.DataManager;
-import src.ctt.GameMlemBot.Logic.GameMlemBotManager.DiscordBotManager;
+import src.ctt.GameMlemBot.Logic.GameMlemBotManager.GameMlemBotManager;
 import src.ctt.GameMlemBot.Logic.Handler.LoadSlashCommands;
 import src.ctt.GameMlemBot.Logic.Handler.OsuHandler.OsuCommandHandler.OsuRequest;
+import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemDataManager;
 import src.ctt.GameMlemBot.Utils.EnviromentGet;
 import src.ctt.GameMlemBot.Utils.FilePath;
 
@@ -27,9 +27,9 @@ public class Start {
         OsuRequest.postAccessAPIKey();
 
         new LoadSlashCommands();
-        new DataManager().loadData();
+        new DataLooper();
 
         // start bot
-        DiscordBotManager.connect(EnviromentGet.DISCORD_BOT_TOKEN());
+        GameMlemBotManager.connect(EnviromentGet.DISCORD_BOT_TOKEN());
     }
 }

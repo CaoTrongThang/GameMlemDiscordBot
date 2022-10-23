@@ -15,18 +15,18 @@ import net.dv8tion.jda.api.entities.MessageEmbed.Field;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
-import src.ctt.GameMlemBot.Enum.Games;
-import src.ctt.GameMlemBot.Enum.OsuModes;
+import src.ctt.GameMlemBot.Enums.Games;
+import src.ctt.GameMlemBot.Enums.OsuModes;
 import src.ctt.GameMlemBot.Language.DefaultEmbed;
 import src.ctt.GameMlemBot.Language.OsuEmbed;
-import src.ctt.GameMlemBot.Logic.Data.GameMlemData.GameMlemDataManager;
-import src.ctt.GameMlemBot.Logic.Data.OsuData.OsuDataManager;
-import src.ctt.GameMlemBot.Logic.Data.OsuData.OsuUserDiscordData;
-import src.ctt.GameMlemBot.Logic.Data.OsuData.OsuModel.OsuBeatmapCalculateData.OsuBeatmapCalculatedData;
-import src.ctt.GameMlemBot.Logic.Data.OsuData.OsuModel.OsuRecentScore.OsuRecentScore;
-import src.ctt.GameMlemBot.Logic.Data.OsuData.OsuModel.OsuUserData.OsuUserData;
-import src.ctt.GameMlemBot.Logic.GameMlemBotManager.DiscordBotManager;
-import src.ctt.GameMlemBot.Utils.ConvertSecondToDateString;
+import src.ctt.GameMlemBot.Language.GameMlemEmbeds.GameMlemEmbed;
+import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemDataManager;
+import src.ctt.GameMlemBot.Logic.Model.OsuData.OsuDataManager;
+import src.ctt.GameMlemBot.Logic.Model.OsuData.OsuUserDiscordData;
+import src.ctt.GameMlemBot.Logic.Model.OsuData.OsuModel.OsuBeatmapCalculateData.OsuBeatmapCalculatedData;
+import src.ctt.GameMlemBot.Logic.Model.OsuData.OsuModel.OsuRecentScore.OsuRecentScore;
+import src.ctt.GameMlemBot.Logic.Model.OsuData.OsuModel.OsuUserData.OsuUserData;
+import src.ctt.GameMlemBot.Utils.ConvertTimeToDateString;
 
 public class OsuHandler {
 
@@ -48,7 +48,7 @@ public class OsuHandler {
             if (osuDiscord == null) {
                 new DefaultEmbed().sendAndDeleteMessageAfter(e,
                         new DefaultEmbed().ACCOUNT_IS_NOT_LINKED(
-                                e.getOption(OsuCommands.userNameOrIDArg).getAsUser().getName(),
+                                e.getOption(OsuCommands.userNameOrIDArg).getAsUser().getIdLong(),
                                 Games.OSU.getValue()));
                 return;
             }
@@ -56,7 +56,7 @@ public class OsuHandler {
             OsuUserDiscordData osuDiscord = osuDataManager.findOsuDiscordLink(e.getUser().getIdLong());
             if (osuDiscord == null) {
                 new DefaultEmbed().sendAndDeleteMessageAfter(e,
-                        new DefaultEmbed().ACCOUNT_IS_NOT_LINKED(e.getUser().getName(), Games.OSU.getValue()));
+                        new DefaultEmbed().ACCOUNT_IS_NOT_LINKED(e.getUser().getIdLong(), Games.OSU.getValue()));
                 return;
             }
         }
@@ -115,7 +115,8 @@ public class OsuHandler {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     new DefaultEmbed().sendAndDeleteMessageAfter(e,
-                            new OsuEmbed().WRONG_OSU_MODE(e.getOption(OsuCommands.osuModeArg).getAsString()));
+                            new DefaultEmbed().WRONG_ENUM_TYPE(e.getOption(OsuCommands.osuModeArg).getAsString(),
+                                    OsuModes.class));
                     return;
                 }
                 if (OsuModes.valueOf(e.getOption(OsuCommands.osuModeArg).getAsString()) == OsuModes.osu) {
@@ -263,9 +264,8 @@ public class OsuHandler {
             eb.addField(resultFieldTitle, strBuilder.toString(), false);
 
             eb.setFooter(
-                    OsuEmbed.RECENT_RETRY + osuScore.getRetry() + "  "
-                            + OffsetDateTime.parse(osuScore.getCreated_at()).toInstant().toString().replace("T", " "),
-                    OsuModes.none.getModeIconURL(osuMode));
+                    OsuEmbed.RECENT_RETRY + osuScore.getRetry() + " ◆ "
+                            + new ConvertTimeToDateString().getCurrentDayMonthYear());
 
             e.getHook().editOriginalEmbeds(eb.build()).queue();
         } catch (Exception ex) {
@@ -300,17 +300,17 @@ public class OsuHandler {
 
             osu.setDiscordID(e.getUser().getIdLong());
             osu.setOsuID(Long.toString(user.getId()));
-            osu.setOsuUserName(option);
+            osu.setOsuUserName(user.getUsername());
 
             if (!osuDataManager.isLinkedWithDiscord(osu)) {
                 osuDataManager.addOsuDiscordLink(osu);
                 new DefaultEmbed().sendAndDeleteMessageAfter(e, new DefaultEmbed()
-                        .ACCOUNT_NOW_LINKED(e.getUser().getName(), Games.OSU.getValue()));
+                        .ACCOUNT_NOW_LINKED(e.getUser().getIdLong(), Games.OSU.getValue()));
                 return;
             } else {
                 osuDataManager.changeOsuDiscordLink(user, e.getUser().getIdLong());
                 new DefaultEmbed().sendAndDeleteMessageAfter(e, new DefaultEmbed()
-                        .ACCOUNT_NOW_LINKED(e.getUser().getName(), Games.OSU.getValue()));
+                        .ACCOUNT_NOW_LINKED(e.getUser().getIdLong(), Games.OSU.getValue()));
                 return;
             }
 
@@ -328,12 +328,12 @@ public class OsuHandler {
             if (osuDataManager.isLinkedWithDiscord(userDiscordID)) {
                 osuDataManager.removeOsuDiscordLink(userDiscordID);
                 new DefaultEmbed().sendAndDeleteMessageAfter(e,
-                        new DefaultEmbed().ACCOUNT_NOW_UNLINKED(e.getUser().getName(),
+                        new DefaultEmbed().ACCOUNT_NOW_UNLINKED(e.getUser().getIdLong(),
                                 Games.OSU.getValue()));
                 return;
             } else {
                 new DefaultEmbed().sendAndDeleteMessageAfter(e,
-                        new DefaultEmbed().ACCOUNT_IS_NOT_LINKED(e.getUser().getName(),
+                        new DefaultEmbed().ACCOUNT_IS_NOT_LINKED(e.getUser().getIdLong(),
                                 Games.OSU.getValue()));
                 return;
             }
@@ -358,7 +358,7 @@ public class OsuHandler {
         eb = new EmbedBuilder();
 
         eb.setColor(DefaultEmbed.DEFAULT_EMBED_COLOR);
-        eb.setTitle(new DefaultEmbed().ROLL_TITLE(e.getUser().getName()));
+        eb.setTitle(new DefaultEmbed().ROLL_TITLE(e.getUser().getIdLong()));
 
         if (gameMlemDataManager.isHighPriorityUser((e.getUser().getIdLong()))) {
             eb.setFooter(DefaultEmbed.ROLL_FOOTER,
@@ -391,7 +391,8 @@ public class OsuHandler {
             mode = OsuModes.osu;
         } else if (OsuModes.valueOf(e.getOption(OsuCommands.osuModeArg).getAsString().toLowerCase()) == null) {
             new DefaultEmbed().sendAndDeleteMessageAfter(e,
-                    new OsuEmbed().WRONG_OSU_MODE(e.getOption(OsuCommands.osuModeArg).getAsString()));
+                    new DefaultEmbed().WRONG_ENUM_TYPE(e.getOption(OsuCommands.osuModeArg).getAsString(),
+                            OsuModes.class));
             return;
         } else {
             mode = OsuModes.valueOf(e.getOption(OsuCommands.osuModeArg).getAsString().toLowerCase());
@@ -440,7 +441,8 @@ public class OsuHandler {
             strBuilder.append(OsuEmbed.USER_PLAYCOUNTS + "**Harumachi**\n");
             strBuilder.append(
                     OsuEmbed.USER_TOTAL_PLAY_HOURS
-                            + new ConvertSecondToDateString().convert(osuUser.getStatistics().getPlay_time()));
+                            + new ConvertTimeToDateString()
+                                    .convertToDayAndHour(osuUser.getStatistics().getPlay_time()));
             eb.addField(new MessageEmbed.Field(infoFieldTitle, strBuilder.toString(), true));
         } else {
             strBuilder.append(OsuEmbed.USER_RANK_GLOBAL + "**#"
@@ -455,7 +457,8 @@ public class OsuHandler {
             strBuilder.append(OsuEmbed.USER_PLAYCOUNTS + osuUser.getStatistics().getPlay_count() + "\n");
             strBuilder.append(
                     OsuEmbed.USER_TOTAL_PLAY_HOURS
-                            + new ConvertSecondToDateString().convert(osuUser.getStatistics().getPlay_time()));
+                            + new ConvertTimeToDateString()
+                                    .convertToDayAndHour(osuUser.getStatistics().getPlay_time()));
             eb.addField(new MessageEmbed.Field(infoFieldTitle, strBuilder.toString(), true));
         }
 

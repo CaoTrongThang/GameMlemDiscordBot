@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import src.ctt.GameMlemBot.Enum.OsuModes;
+import src.ctt.GameMlemBot.Enums.OsuModes;
 
 public class OsuEmbed {
     public static final String OSU_ICON_URL = "https://lemmmy.pw/osusig/img/osu.png";
@@ -61,17 +61,5 @@ public class OsuEmbed {
         eb.setDescription("**" + name + " chưa chơi màn nào trong 24h" + "**");
         return eb.build();
 
-    }
-
-    public final MessageEmbed WRONG_OSU_MODE(String mode) {
-        EmbedBuilder eb = new EmbedBuilder();
-        eb.setColor(DefaultEmbed.ERROR_COLOR);
-        String modes = "";
-        byte modesCount = (byte) OsuModes.class.getFields().length;
-        for (Field field : OsuModes.class.getFields()) {
-            modes += field.getName() + " ";
-        }
-        eb.setDescription("**" + mode + " không hợp lệ, hiện chỉ có " + modesCount + " chế độ: " + modes + "**");
-        return eb.build();
     }
 }

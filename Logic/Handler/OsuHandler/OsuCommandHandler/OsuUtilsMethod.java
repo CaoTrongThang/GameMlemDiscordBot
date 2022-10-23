@@ -5,8 +5,8 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
-import src.ctt.GameMlemBot.Logic.Data.OsuData.OsuModel.OsuBeatmapData.OsuBeatmapData;
-import src.ctt.GameMlemBot.Logic.Data.OsuData.OsuModel.OsuRecentScore.OsuRecentScore;
+import src.ctt.GameMlemBot.Logic.Model.OsuData.OsuModel.OsuBeatmapData.OsuBeatmapData;
+import src.ctt.GameMlemBot.Logic.Model.OsuData.OsuModel.OsuRecentScore.OsuRecentScore;
 import src.ctt.GameMlemBot.Utils.FilePath;
 
 public class OsuUtilsMethod {
