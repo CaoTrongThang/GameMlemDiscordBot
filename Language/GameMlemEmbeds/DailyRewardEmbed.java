@@ -3,6 +3,7 @@ package src.ctt.GameMlemBot.Language.GameMlemEmbeds;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import src.ctt.GameMlemBot.Language.DefaultEmbed;
+import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserData.GameMlemUserData;
 import src.ctt.GameMlemBot.Utils.ConvertTimeToDateString;
 import src.ctt.GameMlemBot.Utils.DecimalFormatter;
 
@@ -23,12 +24,12 @@ public class DailyRewardEmbed {
         return eb.build();
     }
 
-    public final MessageEmbed ROLL_CALL(String name, double moneyGet) {
+    public final MessageEmbed ROLL_CALL(GameMlemUserData user, double moneyGet) {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(DefaultEmbed.ERROR_COLOR);
 
-        eb.setDescription("**" + name + " đã nhận được " + new DecimalFormatter().formatVND(moneyGet)
-                + DefaultEmbed.DEFAULT_CURRENCY + "**");
+        eb.setDescription("**<@" + user.getDISCORD_ID() + "> đã nhận được " + new DecimalFormatter().formatVND(moneyGet)
+                + DefaultEmbed.DEFAULT_CURRENCY + ", chuỗi " + user.getDailyReward().getDailyRewardStrike() + " ngày.");
 
         return eb.build();
     }

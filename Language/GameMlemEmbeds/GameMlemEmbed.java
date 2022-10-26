@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import src.ctt.GameMlemBot.Enums.GameMlemGames;
 import src.ctt.GameMlemBot.Enums.Games;
 import src.ctt.GameMlemBot.Language.DefaultEmbed;
-import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserData;
+import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserData.GameMlemUserData;
 
 public class GameMlemEmbed {
 

@@ -1,4 +1,4 @@
-package src.ctt.GameMlemBot.Logic.Handler.GameMlemHandler.GameMlemCommandHandler;
+package src.ctt.GameMlemBot.Logic.Handler.GameMlem.CommandHandler;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -8,21 +8,22 @@ import java.util.Locale;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import src.ctt.GameMlemBot.Enums.GameMlemGames;
+import src.ctt.GameMlemBot.Enums.GameMlemStatsType;
 import src.ctt.GameMlemBot.Enums.Games;
 import src.ctt.GameMlemBot.Enums.TradeTypes;
 import src.ctt.GameMlemBot.Language.DefaultEmbed;
 import src.ctt.GameMlemBot.Language.GameMlemEmbeds.DailyRewardEmbed;
 import src.ctt.GameMlemBot.Language.GameMlemEmbeds.GameMlemEmbed;
-import src.ctt.GameMlemBot.Logic.Handler.GameMlemHandler.GameMlemCommandHandler.DailyRewardHandler.GameMlemDailyReward;
-import src.ctt.GameMlemBot.Logic.Handler.GameMlemHandler.GameMlemCommandHandler.GameMlemGameHandler.OverOrLowerHandler;
-import src.ctt.GameMlemBot.Logic.Handler.GameMlemHandler.GameMlemCommands.GameMlemSlashCommands;
-import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemDataManager;
-import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserData;
+import src.ctt.GameMlemBot.Logic.Handler.GameMlem.Commands.GameMlemSlashCommands;
+import src.ctt.GameMlemBot.Logic.Handler.GameMlem.DailyRewardHandler.GameMlemDailyRewardHandler;
+import src.ctt.GameMlemBot.Logic.Handler.GameMlem.GameMlemGameHandler.OverOrLowerHandler;
+import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserDataManager;
 import src.ctt.GameMlemBot.Logic.Model.GameMlemData.DailyRewardData.GameMlemDailyRewardData;
+import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserData.GameMlemUserData;
 import src.ctt.GameMlemBot.Utils.DecimalFormatter;
 
 public class GameMlemSlashHandler {
-    GameMlemDataManager gameMlemDataManager = new GameMlemDataManager();
+    GameMlemUserDataManager gameMlemDataManager = new GameMlemUserDataManager();
     DefaultEmbed defaultEmbed = new DefaultEmbed();
     GameMlemEmbed gameMlemEmbed = new GameMlemEmbed();
 
@@ -37,7 +38,40 @@ public class GameMlemSlashHandler {
             DIEM_DANH_HANDLER(e);
         } else if (e.getSubcommandName().equalsIgnoreCase(GameMlemSlashCommands.GIAO_DICH_COMMAND)) {
             GIAO_DICH_HANDLER(e);
+        } else if (e.getSubcommandName().equalsIgnoreCase(GameMlemSlashCommands.THONG_SO_COMMAND)) {
+            THONG_SO_HANDLER(e);
         }
+    }
+
+    private void THONG_SO_HANDLER(SlashCommandInteractionEvent e) {
+        User user = null;
+        GameMlemStatsType statsType;
+        GameMlemUserData targetUser = null;
+        if (e.getOption(GameMlemSlashCommands.userNameOrIDArg) != null) {
+            user = e.getOption(GameMlemSlashCommands.userNameOrIDArg).getAsUser();
+        }
+        if (e.getOption(GameMlemSlashCommands.statsTypeArg) != null) {
+            try {
+                statsType = GameMlemStatsType.valueOf(e.getOption(GameMlemSlashCommands.statsTypeArg).getAsString());
+            } catch (Exception ex) {
+                defaultEmbed.sendAndDeleteMessageAfter(e, defaultEmbed
+                        .WRONG_ENUM_TYPE(e.getOption(GameMlemSlashCommands.statsTypeArg).getAsString(),
+                                GameMlemStatsType.class));
+                ex.printStackTrace();
+            }
+        }
+
+        if (user != null) {
+            targetUser = gameMlemDataManager.loadUser(user.getIdLong());
+            if (targetUser == null) {
+                defaultEmbed.sendAndDeleteMessageAfter(e,
+                        defaultEmbed.ACCOUNT_IS_NOT_LINKED(user.getIdLong(), Games.GAMEMLEM.getValue()));
+                return;
+            }
+        } else {
+            targetUser = gameMlemDataManager.loadUser(e.getUser().getIdLong());
+        }
+
     }
 
     private void DANG_KY_HANDLER(SlashCommandInteractionEvent e) {
@@ -54,7 +88,7 @@ public class GameMlemSlashHandler {
 
         defaultEmbed.sendAndDeleteMessageAfter(e,
                 defaultEmbed.ACCOUNT_NOW_LINKED(e.getUser().getIdLong(), Games.GAMEMLEM.getValue()));
-        new GameMlemDataManager().getUser(e.getUser().getIdLong()).setIsUseCommand(true);
+        new GameMlemUserDataManager().getUser(e.getUser().getIdLong()).setIsUseCommand(true);
     }
 
     public void TAO_GAME_HANDLER(SlashCommandInteractionEvent e) {
@@ -101,8 +135,8 @@ public class GameMlemSlashHandler {
             }
 
             defaultEmbed.sendAndDeleteMessageAfter(e,
-                    new DailyRewardEmbed().ROLL_CALL("<@" + user.getDISCORD_ID() + ">",
-                            new GameMlemDailyReward().giveReward(user)));
+                    new DailyRewardEmbed().ROLL_CALL(user,
+                            new GameMlemDailyRewardHandler().giveReward(user)));
             return;
         }
 
@@ -121,7 +155,7 @@ public class GameMlemSlashHandler {
         // * IF TODAY IS THE REWARD DAY
         if (System.currentTimeMillis() > userDailyReward.getNextRewardDate().getTime()
                 && System.currentTimeMillis() < breakRewardDate.getTime().getTime()) {
-            new GameMlemDailyReward().giveReward(user);
+            new GameMlemDailyRewardHandler().giveReward(user);
 
             userDailyReward.setLastRewardDate(currentDate);
             userDailyReward.setNextRewardDate(breakRewardDate.getTime());
@@ -135,13 +169,13 @@ public class GameMlemSlashHandler {
             }
 
             defaultEmbed.sendAndDeleteMessageAfter(e,
-                    new DailyRewardEmbed().ROLL_CALL("<@" + user.getDISCORD_ID() + ">",
-                            new GameMlemDailyReward().giveReward(user)));
+                    new DailyRewardEmbed().ROLL_CALL(user,
+                            new GameMlemDailyRewardHandler().giveReward(user)));
         }
 
         // * IF TODAY IS = LAST REWARD DATE + 1, BREAK REWARD STRIKE
         if (System.currentTimeMillis() > breakRewardDate.getTime().getTime()) {
-            new GameMlemDailyReward().giveReward(user);
+            new GameMlemDailyRewardHandler().giveReward(user);
 
             userDailyReward.setLastRewardDate(currentDate);
             userDailyReward.setNextRewardDate(nextRewardDateAfterGetReward.getTime());
@@ -155,8 +189,8 @@ public class GameMlemSlashHandler {
             }
 
             defaultEmbed.sendAndDeleteMessageAfter(e,
-                    new DailyRewardEmbed().ROLL_CALL("<@" + user.getDISCORD_ID() + ">",
-                            new GameMlemDailyReward().giveReward(user)));
+                    new DailyRewardEmbed().ROLL_CALL(user,
+                            new GameMlemDailyRewardHandler().giveReward(user)));
         }
     }
 
@@ -190,7 +224,7 @@ public class GameMlemSlashHandler {
 
         GameMlemUserData sourceUser = gameMlemDataManager.getUser(e.getUser().getIdLong());
         GameMlemUserData desUser;
-        if (gameMlemDataManager.loadData(user.getIdLong())) {
+        if (gameMlemDataManager.loadUser(user.getIdLong()) != null) {
             if (tradeType == TradeTypes.MONEY) {
                 try {
                     Double.parseDouble(tradeItem);

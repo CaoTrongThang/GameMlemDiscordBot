@@ -1,10 +1,11 @@
 package src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemGameDataManager.OverOrLower.OverOrLower;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 import src.ctt.GameMlemBot.Enums.TimeInterval;
-import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserData;
+import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserData.GameMlemUserData;
 
 public class OverOrLowerMatchManager {
 
@@ -12,9 +13,11 @@ public class OverOrLowerMatchManager {
     private boolean isPlaying = false;
     private String matchOwner = "";
 
+    private Date cooldown;
+
     private int timeLeft = TimeInterval.EXPIRE_TIME.getValue() / 1000;
 
-    List<OverOrLowerParticipant> matchData = new ArrayList<>();
+    private List<OverOrLowerParticipant> matchData = new ArrayList<>();
 
     public OverOrLowerParticipant GetParticipant(long discordID) {
 

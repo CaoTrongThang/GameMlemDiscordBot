@@ -6,52 +6,46 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import org.bson.Document;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.mongodb.client.FindIterable;
 
+import src.ctt.GameMlemBot.Enums.ReplaceType;
 import src.ctt.GameMlemBot.Enums.TimeInterval;
-import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserData;
+import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserData.GameMlemUserData;
 import src.ctt.GameMlemBot.MongoDB.MongoDBManager;
-import src.ctt.GameMlemBot.Utils.ByteOperator;
-import src.ctt.GameMlemBot.Utils.FilePath;
 
-public class GameMlemDataManager {
+public class GameMlemUserDataManager {
 
     public static List<GameMlemUserData> gameMlemUsers = new ArrayList<>();
     public MongoDBManager mongoDBManager = new MongoDBManager();
 
-    public void saveData() {
+    public void saveUsers() {
         Gson gson = new GsonBuilder().setDateFormat("MMM dd, yyyy HH:mm:ss").create();
 
         for (GameMlemUserData user : gameMlemUsers) {
+            user.setIsUseCommand(false);
             if (user.isUseCommand()) {
                 user.setIsUseCommand(false);
-                if (user.isUseCommand()) {
-                    user.setIsUseCommand(false);
-                    mongoDBManager.findAndReplace(MongoDBManager.USERS_COLLECTION, user.getDISCORD_ID(),
-                            Document.parse(gson.toJson(user)));
-                }
+                mongoDBManager.findAndReplace(MongoDBManager.USERS_COLLECTION, user.getDISCORD_ID(),
+                        Document.parse(gson.toJson(user)), ReplaceType.USER);
             }
         }
     }
 
-    public void saveData(GameMlemUserData user) {
+    public void saveUser(GameMlemUserData user) {
         if (user == null) {
             return;
         }
         Gson gson = new GsonBuilder().setDateFormat("MMM dd, yyyy HH:mm:ss").create();
-        if (user.isUseCommand()) {
-            user.setIsUseCommand(false);
-            mongoDBManager.findAndReplace(MongoDBManager.USERS_COLLECTION, user.getDISCORD_ID(),
-                    Document.parse(gson.toJson(user)));
-        }
+        user.setIsUseCommand(false);
+        mongoDBManager.findAndReplace(MongoDBManager.USERS_COLLECTION, user.getDISCORD_ID(),
+                Document.parse(gson.toJson(user)), ReplaceType.USER);
 
     }
 
@@ -69,23 +63,23 @@ public class GameMlemDataManager {
         }
     }
 
-    public boolean loadData(long discordID) {
+    public GameMlemUserData loadUser(long discordID) {
         if (isExisted(discordID)) {
-            return true;
+            return getUser(discordID);
         } else {
             Gson gson = new GsonBuilder().setDateFormat("MMM dd, yyyy HH:mm:ss").create();
             Document query = new Document("DISCORD_ID", discordID);
             FindIterable<Document> users = mongoDBManager.getCollection(MongoDBManager.USERS_COLLECTION).find(query);
             if (users == null) {
-                return false;
+                return null;
             }
-
+            GameMlemUserData user = null;
             for (Document doc : users) {
-                GameMlemUserData user = gson.fromJson(doc.toJson(), GameMlemUserData.class);
+                user = gson.fromJson(doc.toJson(), GameMlemUserData.class);
                 user.setLAST_ACTIVITY(System.currentTimeMillis());
                 gameMlemUsers.add(user);
             }
-            return true;
+            return user;
         }
     }
 
@@ -113,8 +107,10 @@ public class GameMlemDataManager {
      * @param discordID user's discord indentify
      * 
      */
-    public void saveUserAndRemoveFromCache() {
-        for (GameMlemUserData user : gameMlemUsers) {
+    public void saveUsersAndRemoveFromCache() {
+        Iterator<GameMlemUserData> itr = gameMlemUsers.iterator();
+        while (itr.hasNext()) {
+            GameMlemUserData user = itr.next();
             if ((user.getLAST_ACTIVITY()
                     + TimeInterval.USER_MAX_INACTIVITY_TIME_10.getValue()) < System
                             .currentTimeMillis()) {
@@ -130,9 +126,8 @@ public class GameMlemDataManager {
                     e.printStackTrace();
                 }
 
-                saveData(user);
-                gameMlemUsers.remove(user);
-                return;
+                saveUser(user);
+                itr.remove();
             }
         }
     }

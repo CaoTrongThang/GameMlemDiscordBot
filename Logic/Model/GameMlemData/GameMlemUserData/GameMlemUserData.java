@@ -1,7 +1,9 @@
-package src.ctt.GameMlemBot.Logic.Model.GameMlemData;
+package src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserData;
 
 import net.dv8tion.jda.api.entities.User;
 import src.ctt.GameMlemBot.Logic.Model.BrawlhallaData.BrawlhallaUserDiscordData;
+import src.ctt.GameMlemBot.Logic.Model.GameMlemData.QuickEventUserData;
+import src.ctt.GameMlemBot.Logic.Model.GameMlemData.isPlayingGames;
 import src.ctt.GameMlemBot.Logic.Model.GameMlemData.DailyRewardData.GameMlemDailyRewardData;
 import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemGameUserData.OverOrLowerUserData;
 import src.ctt.GameMlemBot.Logic.Model.OsuData.OsuUserDiscordData;
@@ -25,6 +27,16 @@ public class GameMlemUserData {
     private OverOrLowerUserData overOrLower = new OverOrLowerUserData();
 
     private isPlayingGames isPlaying = new isPlayingGames();
+
+    private QuickEventUserData quickEvent = new QuickEventUserData();
+
+    public QuickEventUserData getQuickEvent() {
+        return quickEvent;
+    }
+
+    public void setQuickEvent(QuickEventUserData quickEvent) {
+        this.quickEvent = quickEvent;
+    }
 
     public isPlayingGames getIsPlaying() {
         return isPlaying;

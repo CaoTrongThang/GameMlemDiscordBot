@@ -10,14 +10,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemDataManager;
-import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserData;
+import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserDataManager;
+import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserData.GameMlemUserData;
 import src.ctt.GameMlemBot.Logic.Model.OsuData.OsuModel.OsuUserData.OsuUserData;
 import src.ctt.GameMlemBot.Utils.ByteOperator;
 import src.ctt.GameMlemBot.Utils.FilePath;
 
 public class OsuDataManager {
-    public GameMlemDataManager gameMlemDataManager = new GameMlemDataManager();
+    public GameMlemUserDataManager gameMlemDataManager = new GameMlemUserDataManager();
 
     public static Gson gson = new GsonBuilder().create();
 

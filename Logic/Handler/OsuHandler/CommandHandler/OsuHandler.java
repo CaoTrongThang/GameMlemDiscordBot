@@ -1,4 +1,4 @@
-package src.ctt.GameMlemBot.Logic.Handler.OsuHandler.OsuCommandHandler;
+package src.ctt.GameMlemBot.Logic.Handler.OsuHandler.CommandHandler;
 
 import java.net.Socket;
 import java.text.DateFormat;
@@ -20,7 +20,7 @@ import src.ctt.GameMlemBot.Enums.OsuModes;
 import src.ctt.GameMlemBot.Language.DefaultEmbed;
 import src.ctt.GameMlemBot.Language.OsuEmbed;
 import src.ctt.GameMlemBot.Language.GameMlemEmbeds.GameMlemEmbed;
-import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemDataManager;
+import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserDataManager;
 import src.ctt.GameMlemBot.Logic.Model.OsuData.OsuDataManager;
 import src.ctt.GameMlemBot.Logic.Model.OsuData.OsuUserDiscordData;
 import src.ctt.GameMlemBot.Logic.Model.OsuData.OsuModel.OsuBeatmapCalculateData.OsuBeatmapCalculatedData;
@@ -32,7 +32,7 @@ public class OsuHandler {
 
     private OsuRequest osuRequest = new OsuRequest();
     private OsuDataManager osuDataManager = new OsuDataManager();
-    private GameMlemDataManager gameMlemDataManager = new GameMlemDataManager();
+    private GameMlemUserDataManager gameMlemDataManager = new GameMlemUserDataManager();
 
     public void osuCommandHander(SlashCommandInteractionEvent e) {
         // LINK HANDLER

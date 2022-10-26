@@ -3,6 +3,7 @@ package src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemGameUserData;
 public class OverOrLowerUserData {
     private int winTimes;
     private int loseTimes;
+    private double winRate;
 
     private double totalBetMoney;
     private double totalOverBetMoney;
@@ -18,6 +19,10 @@ public class OverOrLowerUserData {
 
     private double totalWinMoney;
     private double totalLoseMoney;
+
+    public double getWinRate() {
+        return (this.winTimes * 100) / loseTimes;
+    }
 
     public double getTotalLowerLoseMoney() {
         return this.totalLowerLoseMoney;
@@ -52,11 +57,7 @@ public class OverOrLowerUserData {
     }
 
     public double getTotalBetMoney() {
-        return this.totalBetMoney;
-    }
-
-    public void setTotalBetMoney(double totalBetMoney) {
-        this.totalBetMoney = totalBetMoney;
+        return this.totalLowerBetMoney + this.totalOverBetMoney;
     }
 
     public double getTotalOverBetMoney() {
@@ -108,19 +109,8 @@ public class OverOrLowerUserData {
     }
 
     public double getTotalWinMoney() {
-        return this.totalWinMoney;
-    }
-
-    public void setTotalWinMoney(double totalWinMoney) {
-        this.totalWinMoney = totalWinMoney;
-    }
-
-    public double getTotalLoseMoney() {
-        return this.totalLoseMoney;
-    }
-
-    public void setTotalLoseMoney(double totalLoseMoney) {
-        this.totalLoseMoney = totalLoseMoney;
+        return (this.totalOverWinMoney + this.totalLowerWinMoney)
+                - (this.totalOverLoseMoney + this.totalLowerLoseMoney);
     }
 
 }

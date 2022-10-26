@@ -1,4 +1,4 @@
-package src.ctt.GameMlemBot.Logic.Handler.GameMlemHandler.GameMlemCommandHandler.GameMlemGameHandler;
+package src.ctt.GameMlemBot.Logic.Handler.GameMlem.GameMlemGameHandler;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -16,25 +16,24 @@ import src.ctt.GameMlemBot.Language.DefaultEmbed;
 import src.ctt.GameMlemBot.Language.GameMlemEmbeds.GameMlemEmbed;
 import src.ctt.GameMlemBot.Language.GameMlemEmbeds.OverOrLowerEmbed;
 import src.ctt.GameMlemBot.Logic.GameMlemBotManager.GameMlemGuildManager;
-import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemDataManager;
-import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemGuild;
-import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserData;
+import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserDataManager;
+import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemGuildData;
 import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemGameDataManager.OverOrLower.DicesData;
 import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemGameDataManager.OverOrLower.OverOrLower.OverOrLowerMatchManager;
 import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemGameDataManager.OverOrLower.OverOrLower.OverOrLowerParticipant;
 import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemGameUserData.OverOrLowerUserData;
+import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserData.GameMlemUserData;
 import src.ctt.GameMlemBot.Utils.ConvertTimeToDateString;
 import src.ctt.GameMlemBot.Utils.DecimalFormatter;
 
 public class OverOrLowerHandler {
     GameMlemGuildManager gameMlemGuildManager = new GameMlemGuildManager();
     DefaultEmbed defaultEmbed = new DefaultEmbed();
-    GameMlemDataManager gameMlemDataManager = new GameMlemDataManager();
+    GameMlemUserDataManager gameMlemDataManager = new GameMlemUserDataManager();
     DecimalFormatter currecyFormate = new DecimalFormatter();
 
     public OverOrLowerHandler(SlashCommandInteraction e) {
-
-        GameMlemGuild guild = gameMlemGuildManager.getGuild(e.getGuild().getIdLong());
+        GameMlemGuildData guild = gameMlemGuildManager.getGuild(e.getGuild().getIdLong());
         OverOrLowerMatchManager overOrLowerMatchManager = guild.getOverOrLowerMatchManager();
         overOrLowerMatchManager.setMatchOwner(e.getUser().getName());
 
@@ -238,7 +237,7 @@ public class OverOrLowerHandler {
     }
 
     public OverOrLowerHandler(ButtonInteractionEvent e) {
-        GameMlemGuild guild = gameMlemGuildManager.getGuild(e.getGuild().getIdLong());
+        GameMlemGuildData guild = gameMlemGuildManager.getGuild(e.getGuild().getIdLong());
         OverOrLowerMatchManager overOrLowerMatchManager = guild.getOverOrLowerMatchManager();
         OverOrLowerParticipant user = overOrLowerMatchManager.GetParticipant(e.getUser().getIdLong());
 
@@ -253,116 +252,112 @@ public class OverOrLowerHandler {
         }
 
         if (overOrLowerMatchManager.getTimeLeft() > 5) {
-            // * 1000 OVER
-            if (e.getButton().getId().equalsIgnoreCase(OverOrLowerEmbed.OVER_BET_1000_ID)) {
-                if (user.getUser().getTOTAL_MONEY() >= GameMlemEmbed.BET_1000) {
-                    user.setOverBetMoney(user.getOverBetMoney() + GameMlemEmbed.BET_1000);
-                    updateOverOrLowerEmbed(e, overOrLowerMatchManager);
-                    user.getUser().setTOTAL_MONEY(user.getUser().getTOTAL_MONEY() - GameMlemEmbed.BET_1000);
-                    overOrLowerMatchManager.addParticipant(user);
-                    return;
-                } else {
-                    defaultEmbed.sendEphemeralMessage(e,
-                            defaultEmbed.CAN_NOT_AFFOR_STRING((double) GameMlemEmbed.BET_1000));
-                    return;
+            if (user.getUser().getTOTAL_MONEY() > 0) {
+                // * 1000 OVER
+                if (e.getButton().getId().equalsIgnoreCase(OverOrLowerEmbed.OVER_BET_1000_ID)) {
+                    if (user.getUser().getTOTAL_MONEY() >= GameMlemEmbed.BET_1000) {
+                        user.setOverBetMoney(user.getOverBetMoney() + GameMlemEmbed.BET_1000);
+                        user.getUser().setTOTAL_MONEY(user.getUser().getTOTAL_MONEY() - GameMlemEmbed.BET_1000);
+                        overOrLowerMatchManager.addParticipant(user);
+                        return;
+                    } else {
+                        defaultEmbed.sendEphemeralMessage(e,
+                                defaultEmbed.CAN_NOT_AFFOR_STRING((double) GameMlemEmbed.BET_1000));
+                        return;
+                    }
+                    // * 2000 OVER
+                } else if (e.getButton().getId().equalsIgnoreCase(OverOrLowerEmbed.OVER_BET_2000_ID)) {
+                    if (user.getUser().getTOTAL_MONEY() >= GameMlemEmbed.BET_2000) {
+                        user.setOverBetMoney(user.getOverBetMoney() + GameMlemEmbed.BET_2000);
+                        user.getUser().setTOTAL_MONEY(user.getUser().getTOTAL_MONEY() - GameMlemEmbed.BET_2000);
+                        overOrLowerMatchManager.addParticipant(user);
+                        return;
+                    } else {
+                        defaultEmbed.sendEphemeralMessage(e,
+                                defaultEmbed.CAN_NOT_AFFOR_STRING((double) GameMlemEmbed.BET_2000));
+                        return;
+                    }
+                    // * 5000 OVER
+                } else if (e.getButton().getId().equalsIgnoreCase(OverOrLowerEmbed.OVER_BET_5000_ID)) {
+                    if (user.getUser().getTOTAL_MONEY() >= GameMlemEmbed.BET_5000) {
+                        user.setOverBetMoney(user.getOverBetMoney() + GameMlemEmbed.BET_5000);
+                        user.getUser().setTOTAL_MONEY(user.getUser().getTOTAL_MONEY() - GameMlemEmbed.BET_5000);
+                        overOrLowerMatchManager.addParticipant(user);
+                        return;
+                    } else {
+                        defaultEmbed.sendEphemeralMessage(e,
+                                defaultEmbed.CAN_NOT_AFFOR_STRING((double) GameMlemEmbed.BET_5000));
+                        return;
+                    }
+                    // * ALL OVER
+                } else if (e.getButton().getId().equalsIgnoreCase(OverOrLowerEmbed.OVER_BET_ALL_IN_ID)) {
+                    if (user.getUser().getTOTAL_MONEY() > 0) {
+                        user.setOverBetMoney(user.getOverBetMoney() + user.getUser().getTOTAL_MONEY());
+                        user.getUser().setTOTAL_MONEY(0);
+                        overOrLowerMatchManager.addParticipant(user);
+                        return;
+                    } else {
+                        defaultEmbed.sendEphemeralMessage(e,
+                                defaultEmbed.CAN_NOT_AFFOR_STRING(null));
+                        return;
+                    }
                 }
-                // * 2000 OVER
-            } else if (e.getButton().getId().equalsIgnoreCase(OverOrLowerEmbed.OVER_BET_2000_ID)) {
-                if (user.getUser().getTOTAL_MONEY() >= GameMlemEmbed.BET_2000) {
-                    user.setOverBetMoney(user.getOverBetMoney() + GameMlemEmbed.BET_2000);
-                    updateOverOrLowerEmbed(e, overOrLowerMatchManager);
-                    user.getUser().setTOTAL_MONEY(user.getUser().getTOTAL_MONEY() - GameMlemEmbed.BET_2000);
-                    overOrLowerMatchManager.addParticipant(user);
-                    return;
-                } else {
-                    defaultEmbed.sendEphemeralMessage(e,
-                            defaultEmbed.CAN_NOT_AFFOR_STRING((double) GameMlemEmbed.BET_2000));
-                    return;
+
+                // * 1000 LOWER
+                if (e.getButton().getId().equalsIgnoreCase(OverOrLowerEmbed.LOWER_BET_1000_ID)) {
+                    if (user.getUser().getTOTAL_MONEY() >= GameMlemEmbed.BET_1000) {
+                        user.setLowerBetMoney(user.getLowerBetMoney() + GameMlemEmbed.BET_1000);
+                        user.getUser().setTOTAL_MONEY(user.getUser().getTOTAL_MONEY() - GameMlemEmbed.BET_1000);
+                        overOrLowerMatchManager.addParticipant(user);
+                        return;
+                    } else {
+                        defaultEmbed.sendEphemeralMessage(e,
+                                defaultEmbed.CAN_NOT_AFFOR_STRING((double) GameMlemEmbed.BET_1000));
+                        return;
+                    }
+                    // * 2000 LOWER
+                } else if (e.getButton().getId().equalsIgnoreCase(OverOrLowerEmbed.LOWER_BET_2000_ID)) {
+                    if (user.getUser().getTOTAL_MONEY() >= GameMlemEmbed.BET_2000) {
+                        user.setLowerBetMoney(user.getLowerBetMoney() + GameMlemEmbed.BET_2000);
+                        user.getUser().setTOTAL_MONEY(user.getUser().getTOTAL_MONEY() - GameMlemEmbed.BET_2000);
+                        overOrLowerMatchManager.addParticipant(user);
+                        return;
+                    } else {
+                        defaultEmbed.sendEphemeralMessage(e,
+                                defaultEmbed.CAN_NOT_AFFOR_STRING((double) GameMlemEmbed.BET_2000));
+                        return;
+                    }
+                    // * 5000 LOWER
+                } else if (e.getButton().getId().equalsIgnoreCase(OverOrLowerEmbed.LOWER_BET_5000_ID)) {
+                    if (user.getUser().getTOTAL_MONEY() >= GameMlemEmbed.BET_5000) {
+                        user.setLowerBetMoney(user.getLowerBetMoney() + GameMlemEmbed.BET_5000);
+                        user.getUser().setTOTAL_MONEY(user.getUser().getTOTAL_MONEY() - GameMlemEmbed.BET_5000);
+                        overOrLowerMatchManager.addParticipant(user);
+                        return;
+                    } else {
+                        defaultEmbed.sendEphemeralMessage(e,
+                                defaultEmbed.CAN_NOT_AFFOR_STRING((double) GameMlemEmbed.BET_5000));
+                        return;
+                    }
+                    // * ALL LOWER
+                } else if (e.getButton().getId().equalsIgnoreCase(OverOrLowerEmbed.LOWER_BET_ALL_IN_ID)) {
+                    if (user.getUser().getTOTAL_MONEY() > 0) {
+                        user.setLowerBetMoney(user.getLowerBetMoney() + user.getUser().getTOTAL_MONEY());
+                        user.getUser().setTOTAL_MONEY(0);
+                        overOrLowerMatchManager.addParticipant(user);
+                        return;
+                    } else {
+                        defaultEmbed.sendEphemeralMessage(e,
+                                defaultEmbed.CAN_NOT_AFFOR_STRING(null));
+                        return;
+                    }
                 }
-                // * 5000 OVER
-            } else if (e.getButton().getId().equalsIgnoreCase(OverOrLowerEmbed.OVER_BET_5000_ID)) {
-                if (user.getUser().getTOTAL_MONEY() >= GameMlemEmbed.BET_5000) {
-                    user.setOverBetMoney(user.getOverBetMoney() + GameMlemEmbed.BET_5000);
-                    updateOverOrLowerEmbed(e, overOrLowerMatchManager);
-                    user.getUser().setTOTAL_MONEY(user.getUser().getTOTAL_MONEY() - GameMlemEmbed.BET_5000);
-                    overOrLowerMatchManager.addParticipant(user);
-                    return;
-                } else {
-                    defaultEmbed.sendEphemeralMessage(e,
-                            defaultEmbed.CAN_NOT_AFFOR_STRING((double) GameMlemEmbed.BET_5000));
-                    return;
-                }
-                // * ALL OVER
-            } else if (e.getButton().getId().equalsIgnoreCase(OverOrLowerEmbed.OVER_BET_ALL_IN_ID)) {
-                if (user.getUser().getTOTAL_MONEY() > 0) {
-                    user.setOverBetMoney(user.getOverBetMoney() + user.getUser().getTOTAL_MONEY());
-                    updateOverOrLowerEmbed(e, overOrLowerMatchManager);
-                    user.getUser().setTOTAL_MONEY(0);
-                    overOrLowerMatchManager.addParticipant(user);
-                    return;
-                } else {
-                    defaultEmbed.sendEphemeralMessage(e,
-                            defaultEmbed.CAN_NOT_AFFOR_STRING(null));
-                    return;
-                }
+                updateOverOrLowerEmbed(e, overOrLowerMatchManager);
+            } else {
+                defaultEmbed.sendEphemeralMessage(e,
+                        defaultEmbed.CAN_NOT_AFFOR_STRING(null));
+                return;
             }
-
-            // * 1000 LOWER
-            if (e.getButton().getId().equalsIgnoreCase(OverOrLowerEmbed.LOWER_BET_1000_ID)) {
-                if (user.getUser().getTOTAL_MONEY() >= GameMlemEmbed.BET_1000) {
-                    user.setLowerBetMoney(user.getLowerBetMoney() + GameMlemEmbed.BET_1000);
-                    updateOverOrLowerEmbed(e, overOrLowerMatchManager);
-                    user.getUser().setTOTAL_MONEY(user.getUser().getTOTAL_MONEY() - GameMlemEmbed.BET_1000);
-                    overOrLowerMatchManager.addParticipant(user);
-                    return;
-                } else {
-                    defaultEmbed.sendEphemeralMessage(e,
-                            defaultEmbed.CAN_NOT_AFFOR_STRING((double) GameMlemEmbed.BET_1000));
-                    return;
-                }
-                // * 2000 LOWER
-            } else if (e.getButton().getId().equalsIgnoreCase(OverOrLowerEmbed.LOWER_BET_2000_ID)) {
-                if (user.getUser().getTOTAL_MONEY() >= GameMlemEmbed.BET_2000) {
-                    user.setLowerBetMoney(user.getLowerBetMoney() + GameMlemEmbed.BET_2000);
-                    updateOverOrLowerEmbed(e, overOrLowerMatchManager);
-                    user.getUser().setTOTAL_MONEY(user.getUser().getTOTAL_MONEY() - GameMlemEmbed.BET_2000);
-                    overOrLowerMatchManager.addParticipant(user);
-                    return;
-                } else {
-                    defaultEmbed.sendEphemeralMessage(e,
-                            defaultEmbed.CAN_NOT_AFFOR_STRING((double) GameMlemEmbed.BET_2000));
-                    return;
-                }
-                // * 5000 LOWER
-            } else if (e.getButton().getId().equalsIgnoreCase(OverOrLowerEmbed.LOWER_BET_5000_ID)) {
-                if (user.getUser().getTOTAL_MONEY() >= GameMlemEmbed.BET_5000) {
-                    user.setLowerBetMoney(user.getLowerBetMoney() + GameMlemEmbed.BET_5000);
-                    updateOverOrLowerEmbed(e, overOrLowerMatchManager);
-                    user.getUser().setTOTAL_MONEY(user.getUser().getTOTAL_MONEY() - GameMlemEmbed.BET_5000);
-                    overOrLowerMatchManager.addParticipant(user);
-                    return;
-                } else {
-                    defaultEmbed.sendEphemeralMessage(e,
-                            defaultEmbed.CAN_NOT_AFFOR_STRING((double) GameMlemEmbed.BET_5000));
-                    return;
-                }
-                // * ALL LOWER
-            } else if (e.getButton().getId().equalsIgnoreCase(OverOrLowerEmbed.LOWER_BET_ALL_IN_ID)) {
-                if (user.getUser().getTOTAL_MONEY() > 0) {
-                    user.setLowerBetMoney(user.getLowerBetMoney() + user.getUser().getTOTAL_MONEY());
-                    updateOverOrLowerEmbed(e, overOrLowerMatchManager);
-                    user.getUser().setTOTAL_MONEY(0);
-                    overOrLowerMatchManager.addParticipant(user);
-                    return;
-                } else {
-                    defaultEmbed.sendEphemeralMessage(e,
-                            defaultEmbed.CAN_NOT_AFFOR_STRING(null));
-                    return;
-                }
-            }
-
-            System.out.println(user.getUser().getTOTAL_MONEY());
-
         } else {
             defaultEmbed.sendEphemeralMessage(e, defaultEmbed.CAN_NOT_INTERACT_ANYMORE());
             return;
@@ -435,7 +430,7 @@ public class OverOrLowerHandler {
     public DicesData rollDices() {
         int dice1 = (int) (Math.round(Math.random() * 6));
         int dice2 = (int) (Math.round(Math.random() * 6));
-        int dice3 = (int) (Math.round(Math.random() * 6));
+        int dice3 = (int) (Math.ceil(Math.random() * 6));
 
         while (true) {
             if (!(dice1 > 0 && dice1 <= 6)) {
@@ -445,7 +440,7 @@ public class OverOrLowerHandler {
                 dice2 = (int) (Math.round(Math.random() * 6));
             }
             if (!(dice3 > 0 && dice3 <= 6)) {
-                dice3 = (int) (Math.round(Math.random() * 6));
+                dice3 = (int) (Math.ceil(Math.random() * 6));
             }
 
             if ((dice1 > 0 && dice1 <= 6) && (dice2 > 0 && dice2 <= 6) && (dice3 > 0 || dice3 <= 6)) {

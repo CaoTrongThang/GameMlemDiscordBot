@@ -2,7 +2,7 @@ package src.ctt.GameMlemBot.Logic.Model.GameMlemData.DailyRewardData;
 
 import java.util.Date;
 
-import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserData;
+import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserData.GameMlemUserData;
 
 public class GameMlemDailyRewardData {
     private Date lastRewardDate;

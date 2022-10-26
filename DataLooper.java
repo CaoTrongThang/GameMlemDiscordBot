@@ -1,12 +1,9 @@
 package src.ctt.GameMlemBot;
 
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
-
 import src.ctt.GameMlemBot.Enums.TimeInterval;
-import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemDataManager;
+import src.ctt.GameMlemBot.Logic.GameMlemBotManager.GameMlemGuildManager;
+import src.ctt.GameMlemBot.Logic.Handler.GameMlem.QuickEventHandler.QuickEventHandler;
+import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserDataManager;
 
 public class DataLooper {
 
@@ -14,17 +11,35 @@ public class DataLooper {
         new Thread() {
             @Override
             public void run() {
-                long saveUserTime = System.currentTimeMillis();
+                long saveUserTimeReset = System.currentTimeMillis();
+                long saveGuildTimeReset = System.currentTimeMillis();
+                long spawnQuickEventReset = System.currentTimeMillis();
+
+                QuickEventHandler quickEventHandler = new QuickEventHandler();
+
                 while (true) {
                     try {
-                        sleep(10000);
+                        sleep(TimeInterval.TIME_CHECK_INTERVAL_10.getValue());
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-                    if (saveUserTime + TimeInterval.TIME_CHECK_INTERVAL_10.getValue() < System
+
+                    if (saveUserTimeReset + TimeInterval.TIME_CHECK_INTERVAL_10.getValue() < System
                             .currentTimeMillis()) {
-                        saveUserTime = System.currentTimeMillis();
-                        new GameMlemDataManager().saveUserAndRemoveFromCache();
+                        saveUserTimeReset = System.currentTimeMillis();
+                        new GameMlemUserDataManager().saveUsersAndRemoveFromCache();
+                    }
+
+                    if (saveGuildTimeReset + TimeInterval.TIME_CHECK_INTERVAL_10.getValue() < System
+                            .currentTimeMillis()) {
+                        saveGuildTimeReset = System.currentTimeMillis();
+                        new GameMlemGuildManager().saveGuildsAndRemoveFromCache();
+                    }
+
+                    if (spawnQuickEventReset + TimeInterval.TIME_CHECK_INTERVAL_100.getValue() < System
+                            .currentTimeMillis()) {
+                        spawnQuickEventReset = System.currentTimeMillis();
+                        quickEventHandler.spawnEvent();
                     }
                 }
             }

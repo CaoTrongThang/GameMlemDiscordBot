@@ -1,4 +1,4 @@
-package src.ctt.GameMlemBot.Logic.Handler.GameMlemHandler.GameMlemCommands;
+package src.ctt.GameMlemBot.Logic.Handler.GameMlem.Commands;
 
 import java.lang.StackWalker.Option;
 
@@ -15,7 +15,7 @@ public class GameMlemSlashCommands {
         public static final String TAO_GAME_COMMAND = "taogame";
         public static final String TAO_GAME_COMMAND_DESC = "Tạo phòng cho trò gì đó";
 
-        public static final String STATS_COMMAND = "thongso";
+        public static final String THONG_SO_COMMAND = "thongso";
         public static final String STATS_COMMAND_DESC = "Xem thông số của bạn";
 
         public static final String DIEM_DANH_COMMAND = "diemdanh";
@@ -41,6 +41,9 @@ public class GameMlemSlashCommands {
         public static final String tradeItemArg = "thumuonchuyen";
         public static final String tradeItemDesc = "Ghi thứ bạn muốn chuyển vào đây";
 
+        public static final String statsTypeArg = "thongsomuonxem";
+        public static final String statsDesc = "Thông số mà bạn đang muốn xem";
+
         public static final SubcommandData[] GAME_MLEM_SUB_COMMANDS = {
                         new SubcommandData(DANG_KY_COMMAND, DANG_KY_COMMAND_DESC),
                         new SubcommandData(TAO_GAME_COMMAND, TAO_GAME_COMMAND_DESC)
@@ -50,6 +53,9 @@ public class GameMlemSlashCommands {
                                         .addOption(OptionType.USER, userNameOrIDArg, userNameOrIdDesc, true, false)
                                         .addOption(OptionType.STRING, tradeTypeArg, tradeTypeDesc, true, true)
                                         .addOption(OptionType.STRING, tradeItemArg, tradeTypeArg, true, false),
+                        new SubcommandData(THONG_SO_COMMAND, THONG_SO_COMMAND)
+                                        .addOption(OptionType.USER, userNameOrIDArg, userNameOrIdDesc, false, false)
+                                        .addOption(OptionType.STRING, statsTypeArg, statsDesc, false, true)
 
         };
 }

@@ -25,7 +25,7 @@ import src.ctt.GameMlemBot.Logic.Events.OnCommandAutoComplete;
 import src.ctt.GameMlemBot.Logic.Events.OnMessageRecieve;
 import src.ctt.GameMlemBot.Logic.Events.OnSlashCommand;
 import src.ctt.GameMlemBot.Logic.Events.OnUserUpdateOnlineStatus;
-import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemGuild;
+import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemGuildData;
 
 public class GameMlemBotManager {
     public static JDA jda;
@@ -63,16 +63,12 @@ public class GameMlemBotManager {
         }
         guilds = jda.getGuilds();
 
-        for (Guild guild : guilds) {
-            GameMlemGuildManager.gameMlemGuidlds.add(new GameMlemGuild(guild));
-        }
-
-        addSlashCommand();
+        addSlashCommandToGuild();
 
         System.out.println(DISCORD_BOT_STARTED);
     }
 
-    public static void addSlashCommand() {
+    public static void addSlashCommandToGuild() {
         for (Guild guild : guilds) {
             guild.updateCommands().addCommands(slashCommands).queue();
         }
@@ -81,5 +77,4 @@ public class GameMlemBotManager {
     public static void disconnect() {
         jda.shutdownNow();
     }
-
 }

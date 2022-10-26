@@ -11,8 +11,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import src.ctt.GameMlemBot.Enums.GameMlemGames;
 import src.ctt.GameMlemBot.Enums.Games;
 import src.ctt.GameMlemBot.Language.DefaultEmbed;
-import src.ctt.GameMlemBot.Logic.Handler.GameMlemHandler.GameMlemCommands.GameMlemMessageCommands;
-import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemDataManager;
+import src.ctt.GameMlemBot.Logic.Handler.GameMlem.Commands.GameMlemMessageCommands;
+import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserDataManager;
 
 public class OnMessageRecieve extends ListenerAdapter {
     @Override

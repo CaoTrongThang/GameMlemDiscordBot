@@ -1,28 +1,37 @@
 package src.ctt.GameMlemBot.Logic.Events;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import src.ctt.GameMlemBot.Enums.Games;
 import src.ctt.GameMlemBot.Language.DefaultEmbed;
 import src.ctt.GameMlemBot.Language.GameMlemEmbeds.GameMlemEmbed;
+import src.ctt.GameMlemBot.Logic.GameMlemBotManager.GameMlemGuildManager;
 import src.ctt.GameMlemBot.Logic.Handler.BrawlhallaHandler.BrawlhallaCommandHandler.BrawlhallaCommands;
 import src.ctt.GameMlemBot.Logic.Handler.BrawlhallaHandler.BrawlhallaCommandHandler.BrawlhallaHandler;
-import src.ctt.GameMlemBot.Logic.Handler.GameMlemHandler.GameMlemCommandHandler.GameMlemSlashHandler;
-import src.ctt.GameMlemBot.Logic.Handler.GameMlemHandler.GameMlemCommands.GameMlemSlashCommands;
-import src.ctt.GameMlemBot.Logic.Handler.OsuHandler.OsuCommandHandler.OsuCommands;
-import src.ctt.GameMlemBot.Logic.Handler.OsuHandler.OsuCommandHandler.OsuHandler;
-import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemDataManager;
+import src.ctt.GameMlemBot.Logic.Handler.GameMlem.CommandHandler.GameMlemSlashHandler;
+import src.ctt.GameMlemBot.Logic.Handler.GameMlem.Commands.GameMlemSlashCommands;
+import src.ctt.GameMlemBot.Logic.Handler.OsuHandler.CommandHandler.OsuCommands;
+import src.ctt.GameMlemBot.Logic.Handler.OsuHandler.CommandHandler.OsuHandler;
+import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserDataManager;
+import src.ctt.GameMlemBot.Utils.ThreadManager;
 
 public class OnSlashCommand extends ListenerAdapter {
-    GameMlemDataManager gameMlemDataManager = new GameMlemDataManager();
+    GameMlemUserDataManager gameMlemDataManager = new GameMlemUserDataManager();
+    GameMlemGuildManager gameMlemGuildManager = new GameMlemGuildManager();
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent e) {
         new Thread() {
             @Override
             public void run() {
-                gameMlemDataManager.loadData(e.getUser().getIdLong());
+                // ? Load data when user use command, and remove it when user or guild is
+                // ? inactive so save cache and increase scanning performance
+                gameMlemDataManager.loadUser(e.getUser().getIdLong());
+                gameMlemGuildManager.createGuildIfNotExist(e.getGuild().getIdLong());
 
                 e.deferReply().queue();
                 if (e.getSubcommandName().equalsIgnoreCase(GameMlemSlashCommands.DANG_KY_COMMAND)) {
@@ -30,15 +39,17 @@ public class OnSlashCommand extends ListenerAdapter {
                     return;
                 }
 
-                if (!new GameMlemDataManager().isExisted(e.getUser().getIdLong())) {
+                if (!new GameMlemUserDataManager().isExisted(e.getUser().getIdLong())) {
                     new DefaultEmbed().sendAndDeleteMessageAfter(e,
                             new DefaultEmbed().ACCOUNT_IS_NOT_LINKED(e.getUser().getIdLong(),
                                     Games.GAMEMLEM.getValue()));
                     return;
                 }
 
-                new GameMlemDataManager().getUser(e.getUser().getIdLong()).setIsUseCommand(true)
+                new GameMlemUserDataManager().getUser(e.getUser().getIdLong()).setIsUseCommand(true)
                         .setLAST_ACTIVITY(System.currentTimeMillis());
+                new GameMlemGuildManager().getGuild(e.getGuild().getIdLong())
+                        .setLastActivity(System.currentTimeMillis());
 
                 // * OSU
                 if (e.getName().contains(OsuCommands.OSU_BASE_COMMAND)) {

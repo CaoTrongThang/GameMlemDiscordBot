@@ -3,8 +3,8 @@ package src.ctt.GameMlemBot.Logic.Handler;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import src.ctt.GameMlemBot.Logic.GameMlemBotManager.GameMlemBotManager;
 import src.ctt.GameMlemBot.Logic.Handler.BrawlhallaHandler.BrawlhallaCommandHandler.BrawlhallaCommands;
-import src.ctt.GameMlemBot.Logic.Handler.GameMlemHandler.GameMlemCommands.GameMlemSlashCommands;
-import src.ctt.GameMlemBot.Logic.Handler.OsuHandler.OsuCommandHandler.OsuCommands;
+import src.ctt.GameMlemBot.Logic.Handler.GameMlem.Commands.GameMlemSlashCommands;
+import src.ctt.GameMlemBot.Logic.Handler.OsuHandler.CommandHandler.OsuCommands;
 
 public class LoadSlashCommands {
         static {

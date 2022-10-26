@@ -1,4 +1,4 @@
-package src.ctt.GameMlemBot.Logic.Handler.GameMlemHandler.GameMlemCommands;
+package src.ctt.GameMlemBot.Logic.Handler.GameMlem.Commands;
 
 public class GameMlemMessageCommands {
     public static final String datcuoc = "datcuoc";

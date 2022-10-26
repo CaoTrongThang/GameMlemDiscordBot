@@ -3,11 +3,13 @@ package src.ctt.GameMlemBot;
 import java.io.File;
 
 import src.ctt.GameMlemBot.Logic.GameMlemBotManager.GameMlemBotManager;
+import src.ctt.GameMlemBot.Logic.GameMlemBotManager.GameMlemGuildManager;
 import src.ctt.GameMlemBot.Logic.Handler.LoadSlashCommands;
-import src.ctt.GameMlemBot.Logic.Handler.OsuHandler.OsuCommandHandler.OsuRequest;
-import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemDataManager;
+import src.ctt.GameMlemBot.Logic.Handler.OsuHandler.CommandHandler.OsuRequest;
+import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserDataManager;
 import src.ctt.GameMlemBot.Utils.EnviromentGet;
 import src.ctt.GameMlemBot.Utils.FilePath;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class Start {
     static {
@@ -27,6 +29,7 @@ public class Start {
         OsuRequest.postAccessAPIKey();
 
         new LoadSlashCommands();
+
         new DataLooper();
 
         // start bot

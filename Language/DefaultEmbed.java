@@ -5,14 +5,10 @@ import java.lang.reflect.Field;
 import java.util.concurrent.TimeUnit;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.dv8tion.jda.api.interactions.components.buttons.ButtonInteraction;
-import src.ctt.GameMlemBot.Enums.GameMlemGames;
-import src.ctt.GameMlemBot.Enums.OsuModes;
-import src.ctt.GameMlemBot.Language.GameMlemEmbeds.GameMlemEmbed;
 import src.ctt.GameMlemBot.Utils.DecimalFormatter;
 
 public class DefaultEmbed {
@@ -20,11 +16,12 @@ public class DefaultEmbed {
     public static final Color DEFAULT_EMBED_COLOR = Color.RED;
     public static final Color ERROR_COLOR = Color.RED;
     public static final Color SUCCESS_COLOR = Color.GREEN;
+    public static final Color REWARD_COLOR = Color.YELLOW;
 
     public static final String ROLL_FOOTER = "Người không chơi là người thắng!";
     public static final String STATS_FOOTER = "Xem thông số à...";
 
-    public static final String DEFAULT_CURRENCY = "GND";
+    public static final String DEFAULT_CURRENCY = "MLEM";
 
     public final String ROLL_TITLE(long discordID) {
         return "**<@" + discordID + "> đã xúc sắc được:" + "**";

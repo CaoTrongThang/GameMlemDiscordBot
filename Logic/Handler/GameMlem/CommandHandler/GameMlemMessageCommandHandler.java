@@ -1,4 +1,4 @@
-package src.ctt.GameMlemBot.Logic.Handler.GameMlemHandler.GameMlemCommandHandler;
+package src.ctt.GameMlemBot.Logic.Handler.GameMlem.CommandHandler;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 

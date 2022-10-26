@@ -1,4 +1,4 @@
-package src.ctt.GameMlemBot.Logic.Handler.OsuHandler.OsuCommandHandler;
+package src.ctt.GameMlemBot.Logic.Handler.OsuHandler.CommandHandler;
 
 import java.io.File;
 import java.io.InputStream;

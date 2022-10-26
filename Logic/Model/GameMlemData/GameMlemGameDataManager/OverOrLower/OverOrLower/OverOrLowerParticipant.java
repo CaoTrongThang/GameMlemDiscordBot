@@ -3,7 +3,7 @@ package src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemGameDataManager.Ove
 import java.util.ArrayList;
 import java.util.List;
 
-import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserData;
+import src.ctt.GameMlemBot.Logic.Model.GameMlemData.GameMlemUserData.GameMlemUserData;
 
 public class OverOrLowerParticipant {
     private GameMlemUserData user;
